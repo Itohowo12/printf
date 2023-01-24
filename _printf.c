@@ -21,7 +21,8 @@ int _printf(const char *format, ...)
 		{"b", _print_ub},
 		{"o", _print_uo},
 		{"x", _print_ux},
-		{"X", _print_uX}
+		{"X", _print_uX},
+		{NULL, NULL}
 	};
 
 	va_start(args, format);
@@ -41,7 +42,7 @@ int _printf(const char *format, ...)
 				{
 					j = 0;
 
-					while (j < 9)
+					while (specifiers[j].type != NULL)
 					{
 						if (format[i + 1] == *specifiers[j].type)
 						{

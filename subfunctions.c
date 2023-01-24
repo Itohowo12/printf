@@ -2,12 +2,13 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "main.h"
 
 /**
  * _putchar - prints a character to standard output
  * @c: character to be printed
  *
- * Return: the function
+ * Return: number of characters printed
  */
 int _putchar(char c)
 {
@@ -23,11 +24,17 @@ int _putchar(char c)
 int _print_char(va_list argp)
 {
 	int counter = 0;
+	char c;
 
-	_putchar(va_arg(argp, int));
-	counter++;
+	c = va_arg(argp, int);
 
-	return (counter);
+	if (c)
+	{
+		_putchar(c);
+		counter++;
+		return (counter);
+	}
+	return (-1);
 }
 
 /**
@@ -43,19 +50,23 @@ int _print_string(va_list argp)
 
 	string = va_arg(argp, char *);
 
-	for (j = 0; string[j]; j++)
+	if (string)
 	{
-		_putchar(string[j]);
-		counter++;
+		for (j = 0; string[j]; j++)
+		{
+			_putchar(string[j]);
+			counter++;
+		}
+		return (counter);
 	}
-	return (counter);
+	return (-1);
 }
 
 /**
  * _print_decimal - prints an number in base 10
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_decimal(va_list argp)
 {
@@ -64,30 +75,33 @@ int _print_decimal(va_list argp)
 	k = va_arg(argp, int);
 	size = 1000000000;
 
-	if (k < 0)
+	if (k)
 	{
-		_putchar(45);
-		counter++;
-		k *= -1;
-	}
-
-	do {
-		if (size <= k || size == 1)
+		if (k < 0)
 		{
-			_putchar((k / size) % 10 + '0');
+			_putchar(45);
 			counter++;
+			k *= -1;
 		}
-		size = size / 10;
-	} while (size != 0);
+		do {
+			if (size <= k || size == 1)
+			{
+				_putchar((k / size) % 10 + '0');
+				counter++;
+			}
+			size = size / 10;
+		} while (size != 0);
 
-	return (counter);
+		return (counter);
+	}
+	return (-1);
 }
 
 /**
  * _print_int - prints an integer
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_int(va_list argp)
 {
@@ -96,30 +110,34 @@ int _print_int(va_list argp)
 	k = va_arg(argp, int);
 	size = 1000000000;
 
-	if (k < 0)
+	if (k)
 	{
-		_putchar(45);
-		counter++;
-		k *= -1;
-	}
-
-	do {
-		if (size <= k || size == 1)
+		if (k < 0)
 		{
-			_putchar((k / size) % 10 + '0');
+			_putchar(45);
 			counter++;
+			k *= -1;
 		}
-		size = size / 10;
-	} while (size != 0);
 
-	return (counter);
+		do {
+			if (size <= k || size == 1)
+			{
+				_putchar((k / size) % 10 + '0');
+				counter++;
+			}
+			size = size / 10;
+		} while (size != 0);
+
+		return (counter);
+	}
+	return (-1);
 }
 
 /**
  * _print_unsigned - prints an integer as an unsigned decimal
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_unsigned(va_list argp)
 {
@@ -127,26 +145,29 @@ int _print_unsigned(va_list argp)
 	unsigned int k, size;
 
 	k = va_arg(argp, int);
-
 	size = 1000000000;
 
-	do {
-		if (size <= k || size == 1)
-		{
-			_putchar((k / size) % 10 + '0');
-			counter++;
-		}
-		size = size / 10;
-	} while (size != 0);
+	if (k)
+	{
+		do {
+			if (size <= k || size == 1)
+			{
+				_putchar((k / size) % 10 + '0');
+				counter++;
+			}
+			size = size / 10;
+		} while (size != 0);
 
-	return (counter);
+		return (counter);
+	}
+	return (-1);
 }
 
 /**
  * _print_ub - prints an integer as unsigned binary
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_ub(va_list argp)
 {
@@ -155,42 +176,47 @@ int _print_ub(va_list argp)
 	char *array;
 
 	k = va_arg(argp, int);
-	temp = k;
 
-	while (temp != 0)
+	if (k)
 	{
-		temp /= 2;
-		a++;
-	}
+		temp = k;
 
-	array = malloc((sizeof(char) * a) + 1);
+		while (temp != 0)
+		{
+			temp /= 2;
+			a++;
+		}
 
-	if (array == NULL)
-	{
-		return (-1);
-	}
+		array = malloc((sizeof(char) * a) + 1);
 
-	for (i = 0; i < a; i++)
-	{
-		array[i] = (k % 2) + '0';
-		k /= 2;
-	}
-	array[i] = '\0';
+		if (array == NULL)
+		{
+			return (-1);
+		}
 
-	for (j = a - 1; j >= 0; j--)
-	{
-		_putchar(array[j]);
-		counter++;
+		for (i = 0; i < a; i++)
+		{
+			array[i] = (k % 2) + '0';
+			k /= 2;
+		}
+		array[i] = '\0';
+
+		for (j = a - 1; j >= 0; j--)
+		{
+			_putchar(array[j]);
+			counter++;
+		}
+		free(array);
+		return (counter);
 	}
-	free(array);
-	return (counter);
+	return (-1);
 }
 
 /**
  * _print_uo - prints an integer as an unsigned octal
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_uo(va_list argp)
 {
@@ -199,42 +225,47 @@ int _print_uo(va_list argp)
 	char *array;
 
 	k = va_arg(argp, int);
-	temp = k;
 
-	while (temp != 0)
+	if (k)
 	{
-		temp /= 8;
-		a++;
-	}
+		temp = k;
 
-	array = malloc((sizeof(char) * a) + 1);
+		while (temp != 0)
+		{
+			temp /= 8;
+			a++;
+		}
 
-	if (array == NULL)
-	{
-		return (-1);
-	}
+		array = malloc((sizeof(char) * a) + 1);
 
-	for (i = 0; i < a; i++)
-	{
-		array[i] = (k % 8) + '0';
-		k /= 8;
-	}
-	array[i] = '\0';
+		if (array == NULL)
+		{
+			return (-1);
+		}
 
-	for (j = a - 1; j >= 0; j--)
-	{
-		_putchar(array[j]);
-		counter++;
+		for (i = 0; i < a; i++)
+		{
+			array[i] = (k % 8) + '0';
+			k /= 8;
+		}
+		array[i] = '\0';
+
+		for (j = a - 1; j >= 0; j--)
+		{
+			_putchar(array[j]);
+			counter++;
+		}
+		free(array);
+		return (counter);
 	}
-	free(array);
-	return (counter);
+	return (-1);
 }
 
 /**
  * _print_ux - prints an integer as unsigned hex (lowercase)
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_ux(va_list argp)
 {
@@ -244,42 +275,47 @@ int _print_ux(va_list argp)
 	char *array;
 
 	k = va_arg(argp, int);
-	temp = k;
 
-	while (temp != 0)
+	if (k)
 	{
-		temp /= 16;
-		a++;
-	}
+		temp = k;
 
-	array = malloc((sizeof(char) * a) + 1);
+		while (temp != 0)
+		{
+			temp /= 16;
+			a++;
+		}
 
-	if (array == NULL)
-	{
-		return (-1);
-	}
+		array = malloc((sizeof(char) * a) + 1);
 
-	for (i = 0; i < a; i++)
-	{
-		array[i] = lowerhex[k % 16];
-		k /= 16;
-	}
-	array[i] = '\0';
+		if (array == NULL)
+		{
+			return (-1);
+		}
 
-	for (j = a - 1; j >= 0; j--)
-	{
-		_putchar(array[j]);
-		counter++;
+		for (i = 0; i < a; i++)
+		{
+			array[i] = lowerhex[k % 16];
+			k /= 16;
+		}
+		array[i] = '\0';
+
+		for (j = a - 1; j >= 0; j--)
+		{
+			_putchar(array[j]);
+			counter++;
+		}
+		free(array);
+		return (counter);
 	}
-	free(array);
-	return (counter);
+	return (-1);
 }
 
 /**
  * _print_uX - prints an integer as unsigned hex (uppercase)
  * @argp: pointer to current variable argument
  *
- * Return: Number of characters printed
+ * Return: Number of characters printed or -1 if error
  */
 int _print_uX(va_list argp)
 {
@@ -289,32 +325,37 @@ int _print_uX(va_list argp)
 	char *array;
 
 	k = va_arg(argp, int);
-	temp = k;
 
-	while (temp != 0)
+	if (k)
 	{
-		temp /= 16;
-		a++;
-	}
+		temp = k;
 
-	array = malloc((sizeof(char) * a) + 1);
+		while (temp != 0)
+		{
+			temp /= 16;
+			a++;
+		}
 
-	if (array == NULL)
-	{
-		return (-1);
-	}
-	for (i = 0; i < a; i++)
-	{
-		array[i] = upperhex[k % 16];
-		k /= 16;
-	}
-	array[i] = '\0';
+		array = malloc((sizeof(char) * a) + 1);
 
-	for (j = a - 1; j >= 0; j--)
-	{
-		_putchar(array[j]);
-		counter++;
+		if (array == NULL)
+		{
+			return (-1);
+		}
+		for (i = 0; i < a; i++)
+		{
+			array[i] = upperhex[k % 16];
+			k /= 16;
+		}
+		array[i] = '\0';
+
+		for (j = a - 1; j >= 0; j--)
+		{
+			_putchar(array[j]);
+			counter++;
+		}
+		free(array);
+		return (counter);
 	}
-	free(array);
-	return (counter);
+	return (-1);
 }
