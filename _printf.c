@@ -15,40 +15,52 @@ int _printf(const char *format, ...)
 		{"c", _print_char},
 		{"s", _print_string},
 		{"d", _print_decimal},
-		{"i", _print_int}
+		{"i", _print_int},
+		{"u", _print_unsigned},
+		{"b", _print_ub},
+		{"o", _print_uo},
+		{"x", _print_ux},
+		{"X", _print_uX}
 	};
 
 	va_start(args, format);
-	while (format[i])
+	if (format != NULL)
 	{
-		if (format[i] == 37)
+		while (format[i])
 		{
-			j = 0;
-
-			while (j < 4)
+			if (format[i] == 37)
 			{
-				if (format[i + 1] == *specifiers[j].type)
+				if (format[i + 1] == 37)
 				{
-					counter += specifiers[j].p(args);
+					_putchar(37);
+					counter++;
 					i += 2;
-					break;
 				}
-				j++;
+				else
+				{
+					j = 0;
+
+					while (j < 9)
+					{
+						if (format[i + 1] == *specifiers[j].type)
+						{
+							counter += specifiers[j].p(args);
+							i += 2;
+							break;
+						}
+						j++;
+					}
+				}
+			}
+			else
+			{
+				_putchar(format[i]);
+				counter++;
+				i++;
 			}
 		}
-		else if (format[i] == 37 && format[i + 1] == 37)
-		{
-			_putchar(37);
-			counter++;
-			i += 2;
-		}
-		else
-		{
-			_putchar(format[i]);
-			counter++;
-			i++;
-		}
+		va_end(args);
+		return (counter);
 	}
-	va_end(args);
-	return (counter);
+	return (-1);
 }
