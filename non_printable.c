@@ -26,17 +26,6 @@ int print_non_printable(va_list types, char buffer[], int flags,
 
 	str = va_arg(types, char *);
 
-	if (!str)
-	{
-		write(1, "(", 1);
-		write(1, "n", 1);
-		write(1, "u", 1);
-		write(1, "l", 1);
-		write(1, "l", 1);
-		write(1, ")", 1);
-		return (7);
-	}
-
 	for (i = 0; str[i] != '\0'; i++)
 	{
 		if ((str[i] > 0 && str[i] < 32) || str[i] >= 127)
@@ -45,6 +34,7 @@ int print_non_printable(va_list types, char buffer[], int flags,
 			write(1, "x", 1);
 			ascii = (int)str[i];
 			temp = ascii;
+			len = 0;
 
 			while (temp != 0)
 			{
