@@ -40,4 +40,5 @@ void convert_to_hex(char c)
 	{
 		write(1, &array[k], 1);
 	}
+	free(array);
 }
