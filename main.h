@@ -114,5 +114,6 @@ int is_digit(char);
 
 long int convert_size_number(long int num, int size);
 long int convert_size_unsgnd(unsigned long int num, int size);
+void convert_to_hex(char c);
 
 #endif /* MAIN_H */

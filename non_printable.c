@@ -13,10 +13,8 @@
 int print_non_printable(va_list types, char buffer[], int flags,
 			int width, int precision, int size)
 {
-	int count = 0, len = 0, i, j, k, ascii, temp;
+	int count = 0, i;
 	char *str;
-	char *upperhex = "0123456789ABCDEF";
-	char *array;
 
 	UNUSED(buffer);
 	UNUSED(flags);
@@ -32,39 +30,7 @@ int print_non_printable(va_list types, char buffer[], int flags,
 		{
 			write(1, "\\", 1);
 			write(1, "x", 1);
-			ascii = (int)str[i];
-			temp = ascii;
-			len = 0;
-
-			while (temp != 0)
-			{
-				temp /= 16;
-				len++;
-			}
-
-			if (len < 2)
-			{
-				write(1, "0", 1);
-			}
-
-			array = malloc((sizeof(char) * len) + 1);
-
-			if (array == NULL)
-			{
-				return (-1);
-			}
-
-			for (j = 0; j < len; j++)
-			{
-				array[j] = upperhex[ascii % 16];
-				ascii /= 16;
-			}
-			array[j] = '\0';
-
-			for (k = len - 1; k >= 0; k--)
-			{
-				write(1, &array[k], 1);
-			}
+			convert_to_hex(str[i]);
 			count += 4;
 		}
 		else
@@ -73,6 +39,5 @@ int print_non_printable(va_list types, char buffer[], int flags,
 			count++;
 		}
 	}
-	free(array);
 	return (count);
 }
